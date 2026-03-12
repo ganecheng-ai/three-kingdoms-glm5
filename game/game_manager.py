@@ -2,9 +2,10 @@
 游戏管理器 - 管理游戏的核心逻辑和状态
 """
 import pygame
-from config import COLORS
+from config import COLORS, SOUND_ENABLED
 from game.scene_manager import SceneManager
 from game.resource_loader import ResourceLoader
+from game.sound_manager import get_sound_manager
 
 
 class GameManager:
@@ -17,6 +18,12 @@ class GameManager:
 
         # 初始化资源加载器
         self.resource_loader = ResourceLoader()
+
+        # 初始化音效管理器
+        if SOUND_ENABLED:
+            self.sound_manager = get_sound_manager()
+        else:
+            self.sound_manager = None
 
         # 初始化场景管理器
         self.scene_manager = SceneManager(self)
@@ -39,7 +46,19 @@ class GameManager:
     def cleanup(self):
         """清理资源"""
         self.resource_loader.cleanup()
+        if self.sound_manager:
+            self.sound_manager.cleanup()
 
     def quit_game(self):
         """退出游戏"""
         self.running = False
+
+    def play_sound(self, sound_name):
+        """播放音效"""
+        if self.sound_manager:
+            self.sound_manager.play(sound_name)
+
+    def play_scene_music(self, scene_name):
+        """播放场景音乐"""
+        if self.sound_manager:
+            self.sound_manager.play_scene_music(scene_name)

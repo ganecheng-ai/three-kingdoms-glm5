@@ -110,26 +110,35 @@ class BattleScene:
 
     def _on_pause(self):
         """暂停/继续"""
+        self.game_manager.play_sound('click')
         self.battle_paused = not self.battle_paused
         self.buttons['pause'].text = "继续" if self.battle_paused else "暂停"
 
     def _on_speed_up(self):
         """加速"""
+        self.game_manager.play_sound('click')
         self.battle_speed = min(4, self.battle_speed + 1)
         self._add_log(f"战斗速度: x{self.battle_speed}")
 
     def _on_retreat(self):
         """撤退"""
+        self.game_manager.play_sound('cancel')
         self.battle_result = {'winner': 'defender', 'reason': 'retreat'}
         self._add_log("攻击方撤退！")
 
     def _on_auto(self):
         """自动战斗"""
+        self.game_manager.play_sound('click')
         self._auto_battle()
 
     def _on_confirm(self):
         """确认战斗结果"""
         if self.battle_result:
+            # 播放胜利/失败音效
+            if self.battle_result['winner'] == 'attacker':
+                self.game_manager.play_sound('victory')
+            else:
+                self.game_manager.play_sound('defeat')
             self.game_manager.scene_manager.load_scene('map')
 
     def _auto_battle(self):
@@ -205,9 +214,11 @@ class BattleScene:
         if attacker_alive == 0:
             self.battle_result = {'winner': 'defender', 'reason': 'annihilation'}
             self._add_log("防守方胜利！")
+            self.game_manager.play_sound('defeat')
         elif defender_alive == 0:
             self.battle_result = {'winner': 'attacker', 'reason': 'annihilation'}
             self._add_log("攻击方胜利！")
+            self.game_manager.play_sound('victory')
 
     def _update_unit(self, unit, enemies):
         """更新单位"""
@@ -239,6 +250,9 @@ class BattleScene:
                     damage = random.randint(5, 15)
                     target['hp'] -= damage
                     self._add_effect(target['x'], target['y'], 'hit')
+                    # 播放攻击音效
+                    if random.random() < 0.3:  # 降低音效频率
+                        self.game_manager.play_sound('attack')
 
     def render(self, screen):
         """渲染战斗场景"""

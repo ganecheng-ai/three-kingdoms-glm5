@@ -44,9 +44,11 @@
 - [x] 经济系统
 - [x] 外交系统框架
 
-### 第六阶段：完善与优化 (v0.3.0)
+### 第六阶段：完善与优化 (v0.3.0) ✅
 - [x] 存档系统
-- [ ] 音效和音乐
+- [x] 音效和音乐系统
+- [x] AI行为完善
+- [x] 更多武将和城市
 - [ ] 教程引导
 - [ ] 性能优化
 - [ ] 多平台打包
@@ -61,7 +63,8 @@ three_kingdoms/
 │   ├── game_manager.py  # 游戏管理器
 │   ├── scene_manager.py # 场景管理
 │   ├── resource_loader.py # 资源加载
-│   └── game_state.py    # 存档管理
+│   ├── game_state.py    # 存档管理
+│   └── sound_manager.py # 音效管理
 ├── scenes/
 │   ├── __init__.py
 │   ├── main_menu.py    # 主菜单
@@ -78,7 +81,8 @@ three_kingdoms/
 │   ├── __init__.py
 │   ├── battle.py       # 战斗系统
 │   ├── economy.py      # 经济系统
-│   └── diplomacy.py    # 外交系统
+│   ├── diplomacy.py    # 外交系统
+│   └── ai_system.py    # AI系统
 ├── ui/
 │   ├── __init__.py
 │   ├── button.py
@@ -88,6 +92,9 @@ three_kingdoms/
 │   ├── generals.json   # 武将数据
 │   ├── cities.json     # 城市数据
 │   └── skills.json     # 技能数据
+├── assets/
+│   ├── sounds/         # 音效资源
+│   └── music/          # 音乐资源
 ├── saves/              # 存档目录
 └── utils/
     ├── __init__.py
@@ -95,12 +102,11 @@ three_kingdoms/
 ```
 
 ## 版本历史
+- v0.3.0 - 添加音效系统、完善AI、增加武将城市
 - v0.2.0 - 完善战斗系统、添加存档功能、改进UI
 - v0.1.0 - 基础框架搭建完成
 
 ## 下一步计划
-1. 添加音效和背景音乐
-2. 完善AI行为
-3. 添加更多武将和城市
-4. 添加教程引导
-5. 多平台打包发布
+1. 添加教程引导
+2. 性能优化
+3. 多平台打包发布

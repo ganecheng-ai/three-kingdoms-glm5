@@ -9,6 +9,9 @@ WINDOW_HEIGHT = 720
 WINDOW_TITLE = "三国霸业"
 FPS = 60
 
+# 版本信息
+VERSION = "0.3.0"
+
 # 颜色定义
 COLORS = {
     'background': (20, 30, 40),
@@ -71,3 +74,9 @@ ARMY_BASE_MOVE_SPEED = 5
 
 # 资源设置
 RESOURCE_TICK = 60  # 资源增长间隔（秒）
+
+# 音效设置
+SOUND_ENABLED = True
+MUSIC_VOLUME = 0.7
+SFX_VOLUME = 1.0
+MASTER_VOLUME = 1.0

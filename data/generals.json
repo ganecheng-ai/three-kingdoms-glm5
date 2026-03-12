@@ -247,6 +247,176 @@
         "command": 75,
         "politics": 70,
         "skills": ["名门"],
+        "city": "南皮"
+    },
+    {
+        "name": "颜良",
+        "faction": "袁绍",
+        "force": 95,
+        "intelligence": 40,
+        "command": 70,
+        "politics": 30,
+        "skills": ["勇冠"],
+        "city": "南皮"
+    },
+    {
+        "name": "文丑",
+        "faction": "袁绍",
+        "force": 93,
+        "intelligence": 38,
+        "command": 68,
+        "politics": 28,
+        "skills": ["猛将"],
+        "city": "南皮"
+    },
+    {
+        "name": "田丰",
+        "faction": "袁绍",
+        "force": 25,
+        "intelligence": 92,
+        "command": 65,
+        "politics": 90,
+        "skills": ["谋略"],
+        "city": "南皮"
+    },
+    {
+        "name": "袁术",
+        "faction": "袁术",
+        "force": 60,
+        "intelligence": 55,
+        "command": 65,
+        "politics": 60,
+        "skills": ["野心"],
+        "city": "寿春"
+    },
+    {
+        "name": "纪灵",
+        "faction": "袁术",
+        "force": 82,
+        "intelligence": 45,
+        "command": 70,
+        "politics": 35,
+        "skills": ["猛将"],
+        "city": "寿春"
+    },
+    {
+        "name": "公孙瓒",
+        "faction": "公孙瓒",
+        "force": 78,
+        "intelligence": 60,
+        "command": 80,
+        "politics": 50,
+        "skills": ["白马"],
+        "city": "北平"
+    },
+    {
+        "name": "赵云",
+        "faction": "公孙瓒",
+        "force": 96,
+        "intelligence": 76,
+        "command": 88,
+        "politics": 55,
+        "skills": ["龙胆"],
+        "city": "北平"
+    },
+    {
+        "name": "马腾",
+        "faction": "马腾",
+        "force": 85,
+        "intelligence": 55,
+        "command": 80,
+        "politics": 60,
+        "skills": ["西凉"],
+        "city": "西凉"
+    },
+    {
+        "name": "庞德",
+        "faction": "马腾",
+        "force": 92,
+        "intelligence": 55,
+        "command": 78,
+        "politics": 40,
+        "skills": ["勇猛"],
+        "city": "西凉"
+    },
+    {
+        "name": "司马懿",
+        "faction": "魏",
+        "force": 55,
+        "intelligence": 98,
+        "command": 90,
+        "politics": 95,
+        "skills": ["狼顾", "隐忍"],
+        "city": "洛阳"
+    },
+    {
+        "name": "徐晃",
+        "faction": "魏",
+        "force": 88,
+        "intelligence": 60,
+        "command": 80,
+        "politics": 50,
+        "skills": ["勇将"],
+        "city": "洛阳"
+    },
+    {
+        "name": "张郃",
+        "faction": "魏",
+        "force": 85,
+        "intelligence": 65,
+        "command": 82,
+        "politics": 55,
+        "skills": ["巧变"],
         "city": "邺城"
+    },
+    {
+        "name": "姜维",
+        "faction": "蜀",
+        "force": 88,
+        "intelligence": 90,
+        "command": 90,
+        "politics": 75,
+        "skills": ["继承", "北伐"],
+        "city": "汉中"
+    },
+    {
+        "name": "魏延",
+        "faction": "蜀",
+        "force": 92,
+        "intelligence": 65,
+        "command": 85,
+        "politics": 40,
+        "skills": ["子午谷"],
+        "city": "汉中"
+    },
+    {
+        "name": "孙策",
+        "faction": "吴",
+        "force": 95,
+        "intelligence": 75,
+        "command": 90,
+        "politics": 70,
+        "skills": ["小霸王", "英霸"],
+        "city": "建业"
+    },
+    {
+        "name": "大乔",
+        "faction": "吴",
+        "force": 20,
+        "intelligence": 80,
+        "command": 30,
+        "politics": 75,
+        "skills": ["国色"],
+        "city": "建业"
+    },
+    {
+        "name": "小乔",
+        "faction": "吴",
+        "force": 18,
+        "intelligence": 78,
+        "command": 28,
+        "politics": 72,
+        "skills": ["国色"],
+        "city": "柴桑"
     }
 ]

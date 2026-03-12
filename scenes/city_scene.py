@@ -60,10 +60,12 @@ class CityScene:
 
     def _on_back(self):
         """返回地图"""
+        self.game_manager.play_sound('cancel')
         self.game_manager.scene_manager.load_scene('map')
 
     def _switch_tab(self, tab_name):
         """切换标签页"""
+        self.game_manager.play_sound('click')
         self.current_tab = tab_name
         self.selected_general = None
 
@@ -74,8 +76,10 @@ class CityScene:
                 self.city.gold -= 1000
                 self.city.population -= 1000
                 self.city.soldiers += 1000
+                self.game_manager.play_sound('recruit')
                 self._show_message("成功招募1000名士兵！")
             else:
+                self.game_manager.play_sound('cancel')
                 self._show_message("资源不足！需要金钱1000，人口1000")
 
     def _on_train(self):
@@ -83,8 +87,10 @@ class CityScene:
         if self.city:
             if self.city.gold >= 500:
                 self.city.gold -= 500
+                self.game_manager.play_sound('gold')
                 self._show_message("军队训练完成，士气提升！")
             else:
+                self.game_manager.play_sound('cancel')
                 self._show_message("金钱不足！需要500金钱")
 
     def _on_upgrade(self):
@@ -94,8 +100,10 @@ class CityScene:
             if self.city.gold >= upgrade_cost:
                 self.city.gold -= upgrade_cost
                 self.city.buildings['farm'] = self.city.buildings.get('farm', 1) + 1
+                self.game_manager.play_sound('build')
                 self._show_message(f"农田升级到 Lv.{self.city.buildings['farm']}！")
             else:
+                self.game_manager.play_sound('cancel')
                 self._show_message(f"金钱不足！需要{upgrade_cost}金钱")
 
     def _show_message(self, text):

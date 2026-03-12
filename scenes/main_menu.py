@@ -3,7 +3,7 @@
 """
 import pygame
 import math
-from config import COLORS, WINDOW_WIDTH, WINDOW_HEIGHT
+from config import COLORS, WINDOW_WIDTH, WINDOW_HEIGHT, VERSION
 from ui.button import Button
 from ui.panel import Panel
 from game.game_state import GameState
@@ -91,11 +91,15 @@ class MainMenuScene:
 
     def _on_new_game(self):
         """新游戏按钮回调"""
+        # 播放确认音效
+        self.game_manager.play_sound('confirm')
         # 初始化新游戏
         self.game_manager.scene_manager.load_scene('map', new_game=True)
 
     def _on_load_game(self):
         """读取游戏按钮回调"""
+        # 播放点击音效
+        self.game_manager.play_sound('click')
         self.showing_saves = True
         self._refresh_save_slots()
 
@@ -123,16 +127,19 @@ class MainMenuScene:
         if self.selected_slot:
             data = self.game_state.load_game(self.selected_slot)
             if data:
+                self.game_manager.play_sound('load')
                 self.game_manager.scene_manager.load_scene('map', save_data=data)
                 self.showing_saves = False
 
     def _on_back(self):
         """返回主菜单"""
+        self.game_manager.play_sound('cancel')
         self.showing_saves = False
         self.selected_slot = None
 
     def _on_quit(self):
         """退出游戏按钮回调"""
+        self.game_manager.play_sound('cancel')
         self.game_manager.quit_game()
 
     def handle_event(self, event):
@@ -265,5 +272,5 @@ class MainMenuScene:
     def _draw_version(self, screen):
         """绘制版本信息"""
         font = self.resource_loader.get_font('small')
-        version_text = font.render("v0.2.0", True, COLORS['light_gray'])
+        version_text = font.render(f"v{VERSION}", True, COLORS['light_gray'])
         screen.blit(version_text, (WINDOW_WIDTH - 60, WINDOW_HEIGHT - 30))

@@ -16,6 +16,7 @@ from entities.faction import Faction
 from entities.army import Army
 from systems.battle import BattleSystem
 from systems.economy import EconomySystem
+from systems.ai_system import get_ai_system
 from game.game_state import GameState
 
 
@@ -240,6 +241,7 @@ class MapScene:
 
     def _on_save(self):
         """保存游戏"""
+        self.game_manager.play_sound('click')
         self.show_save_menu = True
         saves = self.game_state.list_saves()
         for i, save_info in enumerate(saves):
@@ -256,19 +258,23 @@ class MapScene:
             self.turn, self.year, self.month, self.player_faction
         )
         if self.game_state.save_game(slot, game_data):
+            self.game_manager.play_sound('save')
             self._add_message(f"游戏已保存到存档 {slot}")
         self.show_save_menu = False
 
     def _on_cancel_save(self):
         """取消保存"""
+        self.game_manager.play_sound('cancel')
         self.show_save_menu = False
 
     def _on_menu(self):
         """菜单按钮回调"""
+        self.game_manager.play_sound('click')
         self.game_manager.scene_manager.load_scene('main_menu')
 
     def _on_end_turn(self):
         """回合结束"""
+        self.game_manager.play_sound('turn_end')
         self._process_turn()
         self._add_message(f"第{self.turn}回合 - {self.year}年{self.month}月")
 
@@ -297,18 +303,21 @@ class MapScene:
 
     def _ai_action(self):
         """AI行动"""
+        ai_system = get_ai_system()
         for faction_name, faction in self.factions.items():
             if faction_name == self.player_faction:
                 continue
 
-            # AI城市发展
-            for city_name in faction.cities:
-                if city_name in self.cities:
-                    city = self.cities[city_name]
-                    # 招募士兵
-                    if city.gold > 1000 and city.population > 5000:
-                        recruit_count = min(500, city.population // 10)
-                        city.recruit_soldiers(recruit_count)
+            # 使用AI系统处理回合
+            logs = ai_system.process_turn(
+                faction_name, faction,
+                self.cities, self.generals,
+                self.player_faction
+            )
+
+            # 显示AI行动日志
+            for log in logs[:3]:  # 限制显示的日志数量
+                self._add_message(log)
 
     def _on_zoom_in(self):
         """放大地图"""
@@ -321,11 +330,13 @@ class MapScene:
     def _on_city_detail(self):
         """查看城市详情"""
         if self.selected_city:
+            self.game_manager.play_sound('click')
             self.game_manager.scene_manager.load_scene('city', city_name=self.selected_city.name)
 
     def _on_attack(self):
         """发起攻击"""
         if self.selected_city:
+            self.game_manager.play_sound('battle_start')
             self.game_manager.scene_manager.load_scene('battle', attacker=self.player_faction, city=self.selected_city)
 
     def handle_event(self, event):
