@@ -18,12 +18,15 @@ jobs:
           - os: windows-latest
             artifact_name: three_kingdoms_windows
             executable_name: three_kingdoms.exe
+            archive_format: zip
           - os: ubuntu-latest
             artifact_name: three_kingdoms_linux
             executable_name: three_kingdoms
+            archive_format: tar.gz
           - os: macos-latest
             artifact_name: three_kingdoms_macos
             executable_name: three_kingdoms
+            archive_format: tar.gz
 
     steps:
     - uses: actions/checkout@v4
@@ -38,9 +41,9 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    - name: Build executable
+    - name: Build executable with PyInstaller
       run: |
-        pyinstaller --onefile --windowed --name ${{ matrix.executable_name }} main.py
+        pyinstaller three_kingdoms.spec --clean
 
     - name: Create archive (Windows)
       if: matrix.os == 'windows-latest'
@@ -79,19 +82,44 @@ jobs:
       with:
         path: artifacts
 
+    - name: Prepare release files
+      run: |
+        mkdir -p release_files
+        find artifacts -name "*.zip" -o -name "*.tar.gz" | while read f; do
+          cp "$f" release_files/
+        done
+
     - name: Generate checksums
       run: |
-        cd artifacts
-        find . -type f -exec sha256sum {} \; > ../checksums.txt
+        cd release_files
+        sha256sum * > checksums.txt
+
+    - name: Get version from tag
+      id: get_version
+      run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
 
     - name: Create Release
       uses: softprops/action-gh-release@v1
       with:
+        tag_name: ${{ steps.get_version.outputs.VERSION }}
+        name: 三国霸业 ${{ steps.get_version.outputs.VERSION }}
+        body: |
+          ## 三国霸业 ${{ steps.get_version.outputs.VERSION }}
+
+          ### 下载说明
+          - **Windows**: 下载 `three_kingdoms_windows.zip`，解压后运行 `three_kingdoms.exe`
+          - **Linux**: 下载 `three_kingdoms_linux.tar.gz`，解压后运行 `three_kingdoms`
+          - **macOS**: 下载 `three_kingdoms_macos.tar.gz`，解压后运行 `three_kingdoms`
+
+          ### 系统要求
+          - Windows 10/11 64位
+          - Linux (glibc 2.28+)
+          - macOS 10.15+
+
+          ### 文件校验
+          请查看 `checksums.txt` 确认文件完整性
         files: |
-          artifacts/three_kingdoms_windows/three_kingdoms_windows.zip
-          artifacts/three_kingdoms_linux/three_kingdoms_linux.tar.gz
-          artifacts/three_kingdoms_macos/three_kingdoms_macos.tar.gz
-          checksums.txt
+          release_files/*
         generate_release_notes: true
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
