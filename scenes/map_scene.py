@@ -221,6 +221,7 @@ class MapScene(BaseScene):
         """创建UI元素"""
         # 顶部信息栏按钮
         self.top_buttons = {
+            'diplomacy': Button(WINDOW_WIDTH - 400, 10, 90, 35, "外交", self._on_diplomacy),
             'save': Button(WINDOW_WIDTH - 300, 10, 90, 35, "存档", self._on_save),
             'menu': Button(WINDOW_WIDTH - 200, 10, 90, 35, "菜单", self._on_menu),
             'end_turn': Button(WINDOW_WIDTH - 100, 10, 90, 35, "回合结束", self._on_end_turn),
@@ -274,6 +275,14 @@ class MapScene(BaseScene):
         """取消保存"""
         self.game_manager.play_sound('cancel')
         self.show_save_menu = False
+
+    def _on_diplomacy(self):
+        """外交按钮回调"""
+        self.game_manager.play_sound('click')
+        # 设置共享数据
+        self.game_manager.set_shared_data('factions', self.factions)
+        self.game_manager.set_shared_data('player_faction', self.player_faction)
+        self.game_manager.scene_manager.load_scene('diplomacy')
 
     def _on_menu(self):
         """菜单按钮回调"""

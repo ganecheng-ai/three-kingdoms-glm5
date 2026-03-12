@@ -6,6 +6,7 @@ from scenes.map_scene import MapScene
 from scenes.battle_scene import BattleScene
 from scenes.city_scene import CityScene
 from scenes.settings_scene import SettingsScene
+from scenes.diplomacy_scene import DiplomacyScene
 
 
 class SceneManager:
@@ -28,6 +29,7 @@ class SceneManager:
             'battle': BattleScene,
             'city': CityScene,
             'settings': SettingsScene,
+            'diplomacy': DiplomacyScene,
         }
 
     def load_scene(self, scene_name, **kwargs):

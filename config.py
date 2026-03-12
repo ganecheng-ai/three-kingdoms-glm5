@@ -10,7 +10,7 @@ WINDOW_TITLE = "三国霸业"
 FPS = 60
 
 # 版本信息
-VERSION = "1.0.7"
+VERSION = "1.0.8"
 
 # 颜色定义
 COLORS = {
