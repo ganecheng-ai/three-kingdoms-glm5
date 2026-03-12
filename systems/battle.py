@@ -2,7 +2,6 @@
 战斗系统
 """
 import random
-from entities.army import Army
 
 
 class BattleSystem:

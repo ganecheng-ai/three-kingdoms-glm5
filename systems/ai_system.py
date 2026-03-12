@@ -2,7 +2,6 @@
 AI系统 - 管理AI势力的行为决策
 """
 import random
-from entities.army import Army
 
 
 class AISystem:
@@ -112,26 +111,33 @@ class AISystem:
 
     def _find_attack_target(self, faction_name, faction, cities):
         """寻找攻击目标"""
-        # 获取势力城市位置
+        # 获取势力城市列表和兵力最多的城市
         my_cities = []
+        strongest_city = None
+        max_soldiers = 0
+
         for city_name in faction.cities:
             if city_name in cities:
-                my_cities.append(cities[city_name])
+                city = cities[city_name]
+                my_cities.append(city)
+                if city.soldiers > max_soldiers:
+                    max_soldiers = city.soldiers
+                    strongest_city = city
 
-        if not my_cities:
+        if not my_cities or not strongest_city:
             return None
 
-        # 寻找最近的敌方城市
+        # 寻找最近的敌方城市（兵力少于己方最强城市）
         best_target = None
         min_distance = float('inf')
 
         for city_name, city in cities.items():
             if city.faction != faction_name:
-                for my_city in my_cities:
-                    dist = ((city.x - my_city.x) ** 2 + (city.y - my_city.y) ** 2) ** 0.5
-                    if dist < min_distance and city.soldiers < my_city.soldiers:
-                        min_distance = dist
-                        best_target = city_name
+                # 使用己方兵力最多的城市作为比较基准
+                dist = ((city.x - strongest_city.x) ** 2 + (city.y - strongest_city.y) ** 2) ** 0.5
+                if dist < min_distance and city.soldiers < strongest_city.soldiers:
+                    min_distance = dist
+                    best_target = city_name
 
         return best_target
 

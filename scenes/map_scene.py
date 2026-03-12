@@ -5,14 +5,12 @@ import pygame
 import math
 import json
 import os
-import random
 from config import COLORS, WINDOW_WIDTH, WINDOW_HEIGHT, MAP_SCROLL_SPEED, MAP_ZOOM_MIN, MAP_ZOOM_MAX, MAP_ZOOM_STEP, FACTION_COLORS, DATA_DIR
 from ui.button import Button
 from ui.dialog import Dialog
 from entities.city import City
 from entities.general import General
 from entities.faction import Faction
-from entities.army import Army
 from systems.battle import BattleSystem
 from systems.economy import EconomySystem
 from systems.ai_system import get_ai_system
@@ -83,6 +81,9 @@ class MapScene(BaseScene):
         # 创建UI
         self._create_ui()
         self.logger.info("地图场景初始化完成")
+
+        # 处理战斗结果（从战斗场景返回时）
+        self._process_battle_result()
 
     def _init_game_data(self):
         """初始化游戏数据"""
@@ -680,3 +681,48 @@ class MapScene(BaseScene):
         for btn in self.save_slots.values():
             btn.render(screen, self.resource_loader)
         self.cancel_save_btn.render(screen, self.resource_loader)
+
+    def _process_battle_result(self):
+        """处理战斗结果，更新势力城市列表"""
+        battle_result = self.game_manager.get_shared_data('battle_result')
+        if not battle_result:
+            return
+
+        # 清除已处理的战斗结果
+        self.game_manager.set_shared_data('battle_result', None)
+
+        winner = battle_result.get('winner')
+        city_name = battle_result.get('city_name')
+
+        if winner == 'attacker' and city_name:
+            new_faction = battle_result.get('new_faction')
+            old_faction = battle_result.get('old_faction')
+
+            if new_faction and old_faction:
+                # 更新势力的城市列表
+                if old_faction in self.factions:
+                    self.factions[old_faction].remove_city(city_name)
+                    self.logger.info(f"{old_faction} 失去城市 {city_name}")
+
+                if new_faction in self.factions:
+                    self.factions[new_faction].add_city(city_name)
+                    self.logger.info(f"{new_faction} 获得城市 {city_name}")
+
+                # 更新城市的武将归属
+                if city_name in self.cities:
+                    city = self.cities[city_name]
+                    for general_name in city.generals[:]:
+                        if general_name in self.generals:
+                            general = self.generals[general_name]
+                            # 将武将从旧势力移除
+                            if old_faction in self.factions:
+                                self.factions[old_faction].remove_general(general_name)
+                            # 将武将添加到新势力
+                            if new_faction in self.factions:
+                                self.factions[new_faction].add_general(general_name)
+                            general.faction = new_faction
+
+                self._add_message(f"战斗胜利！{city_name} 已归属 {new_faction}！")
+
+        elif winner == 'defender' and city_name:
+            self._add_message(f"战斗失败，{city_name} 仍在敌方手中")

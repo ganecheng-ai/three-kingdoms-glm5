@@ -143,12 +143,13 @@ class BattleScene(BaseScene):
                     # 扣除攻击方兵力损耗
                     attacker_losses = self.battle_result.get('attacker_losses', 0)
                     self.target_city.soldiers = max(0, self.target_city.soldiers - attacker_losses)
-                    # 保存战斗结果供地图场景使用
+                    # 保存战斗结果供地图场景使用，包含势力更新信息
                     self.game_manager.set_shared_data('battle_result', {
                         'winner': 'attacker',
                         'city_name': self.target_city.name,
                         'new_faction': self.attacker_faction,
                         'old_faction': old_faction,
+                        'update_factions': True,  # 标记需要更新势力
                     })
             else:
                 self.game_manager.play_sound('defeat')
