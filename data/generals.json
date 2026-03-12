@@ -310,13 +310,13 @@
         "city": "北平"
     },
     {
-        "name": "赵云",
+        "name": "严纲",
         "faction": "公孙瓒",
-        "force": 96,
-        "intelligence": 76,
-        "command": 88,
-        "politics": 55,
-        "skills": ["龙胆"],
+        "force": 78,
+        "intelligence": 55,
+        "command": 75,
+        "politics": 45,
+        "skills": ["白马"],
         "city": "北平"
     },
     {
