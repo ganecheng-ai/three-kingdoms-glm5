@@ -72,3 +72,6 @@ Thumbs.db
 *.pem
 secrets.json
 .env.local
+
+# Game logs
+logs/

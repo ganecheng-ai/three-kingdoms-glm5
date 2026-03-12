@@ -7,6 +7,8 @@ from config import COLORS, WINDOW_WIDTH, WINDOW_HEIGHT, VERSION
 from ui.button import Button
 from ui.panel import Panel
 from game.game_state import GameState
+from game.tutorial import TutorialSystem
+from utils.logger import get_logger
 
 
 class MainMenuScene:
@@ -17,6 +19,10 @@ class MainMenuScene:
         self.game_manager = game_manager
         self.resource_loader = game_manager.resource_loader
         self.game_state = GameState(game_manager)
+        self.logger = get_logger()
+
+        # 教程系统
+        self.tutorial = TutorialSystem(game_manager)
 
         # 动画相关
         self.animation_time = 0
@@ -33,6 +39,7 @@ class MainMenuScene:
 
         # 创建UI元素
         self._create_ui()
+        self.logger.info("主菜单场景初始化完成")
 
     def _init_particles(self):
         """初始化粒子效果"""
@@ -61,12 +68,16 @@ class MainMenuScene:
                 button_x, center_y + 20, button_width, button_height,
                 "开始新游戏", self._on_new_game
             ),
-            'load_game': Button(
+            'tutorial': Button(
                 button_x, center_y + 90, button_width, button_height,
+                "游戏教程", self._on_tutorial
+            ),
+            'load_game': Button(
+                button_x, center_y + 160, button_width, button_height,
                 "读取存档", self._on_load_game
             ),
             'quit': Button(
-                button_x, center_y + 160, button_width, button_height,
+                button_x, center_y + 230, button_width, button_height,
                 "退出游戏", self._on_quit
             ),
         }
@@ -93,8 +104,15 @@ class MainMenuScene:
         """新游戏按钮回调"""
         # 播放确认音效
         self.game_manager.play_sound('confirm')
-        # 初始化新游戏
+        self.logger.info("开始新游戏")
+        # 初始化新游戏（不再自动启动教程，玩家可从教程按钮进入）
         self.game_manager.scene_manager.load_scene('map', new_game=True)
+
+    def _on_tutorial(self):
+        """教程按钮回调"""
+        self.game_manager.play_sound('click')
+        self.logger.info("打开教程")
+        self.tutorial.start_tutorial()
 
     def _on_load_game(self):
         """读取游戏按钮回调"""
@@ -144,6 +162,11 @@ class MainMenuScene:
 
     def handle_event(self, event):
         """处理事件"""
+        # 处理教程事件
+        if self.tutorial.visible:
+            if self.tutorial.handle_event(event):
+                return
+
         if self.showing_saves:
             for button in self.save_buttons.values():
                 button.handle_event(event)
@@ -155,6 +178,9 @@ class MainMenuScene:
 
     def update(self):
         """更新场景"""
+        # 更新教程
+        self.tutorial.update()
+
         # 更新动画
         self.animation_time += 1
         self.title_y_offset = math.sin(self.animation_time * 0.03) * 5
@@ -193,6 +219,9 @@ class MainMenuScene:
 
         # 绘制版本信息
         self._draw_version(screen)
+
+        # 绘制教程
+        self.tutorial.render(screen)
 
     def _draw_background(self, screen):
         """绘制背景"""

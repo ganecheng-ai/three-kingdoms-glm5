@@ -18,6 +18,8 @@ from systems.battle import BattleSystem
 from systems.economy import EconomySystem
 from systems.ai_system import get_ai_system
 from game.game_state import GameState
+from game.tutorial import TutorialSystem
+from utils.logger import get_logger
 
 
 class MapScene:
@@ -36,6 +38,10 @@ class MapScene:
         self.game_state = GameState(game_manager)
         self.economy_system = EconomySystem()
         self.battle_system = BattleSystem()
+        self.logger = get_logger()
+
+        # 教程系统
+        self.tutorial = TutorialSystem(game_manager)
 
         # 游戏时间
         self.turn = 1
@@ -79,9 +85,11 @@ class MapScene:
 
         # 创建UI
         self._create_ui()
+        self.logger.info("地图场景初始化完成")
 
     def _init_game_data(self):
         """初始化游戏数据"""
+        self.logger.info("初始化新游戏数据")
         # 从JSON文件加载数据
         self._load_cities_from_json()
         self._load_generals_from_json()
@@ -112,6 +120,7 @@ class MapScene:
                 self.factions[general.faction].add_general(general.name)
 
         self._add_message("游戏开始！选择魏国作为玩家势力。")
+        self.logger.info(f"游戏开始，玩家势力: {self.player_faction}")
 
     def _load_cities_from_json(self):
         """从JSON文件加载城市数据"""
@@ -260,6 +269,7 @@ class MapScene:
         if self.game_state.save_game(slot, game_data):
             self.game_manager.play_sound('save')
             self._add_message(f"游戏已保存到存档 {slot}")
+            self.logger.info(f"游戏已保存到存档 {slot}")
         self.show_save_menu = False
 
     def _on_cancel_save(self):
@@ -341,6 +351,11 @@ class MapScene:
 
     def handle_event(self, event):
         """处理事件"""
+        # 处理教程事件
+        if self.tutorial.visible:
+            if self.tutorial.handle_event(event):
+                return
+
         # 如果显示存档菜单
         if self.show_save_menu:
             for btn in self.save_slots.values():
@@ -401,6 +416,9 @@ class MapScene:
 
     def update(self):
         """更新场景"""
+        # 更新教程
+        self.tutorial.update()
+
         self.animation_time += 1
 
         # 更新消息
@@ -441,6 +459,9 @@ class MapScene:
         # 绘制对话框
         if self.dialog:
             self.dialog.render(screen, self.resource_loader)
+
+        # 绘制教程
+        self.tutorial.render(screen)
 
     def _draw_map_background(self, screen):
         """绘制地图背景"""
