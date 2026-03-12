@@ -1,6 +1,7 @@
 """
 经济系统
 """
+from config import RECRUIT_GOLD_PER_SOLDIER, RECRUIT_POPULATION_PER_SOLDIER
 
 
 class EconomySystem:
@@ -110,10 +111,11 @@ class EconomySystem:
         Returns:
             是否成功
         """
-        cost = count * 10  # 每士兵10金钱
-        if city.gold >= cost and city.population >= count:
-            city.gold -= cost
-            city.population -= count
+        gold_cost = count * RECRUIT_GOLD_PER_SOLDIER
+        pop_cost = count * RECRUIT_POPULATION_PER_SOLDIER
+        if city.gold >= gold_cost and city.population >= pop_cost:
+            city.gold -= gold_cost
+            city.population -= pop_cost
             city.soldiers += count
             return True
         return False

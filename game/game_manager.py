@@ -16,6 +16,9 @@ class GameManager:
         self.screen = screen
         self.running = True
 
+        # 共享数据存储（用于场景间数据传递）
+        self.shared_data = {}
+
         # 初始化资源加载器
         self.resource_loader = ResourceLoader()
 
@@ -62,3 +65,11 @@ class GameManager:
         """播放场景音乐"""
         if self.sound_manager:
             self.sound_manager.play_scene_music(scene_name)
+
+    def set_shared_data(self, key, value):
+        """设置共享数据"""
+        self.shared_data[key] = value
+
+    def get_shared_data(self, key, default=None):
+        """获取共享数据"""
+        return self.shared_data.get(key, default)

@@ -1,6 +1,7 @@
 """
 城市实体类
 """
+from config import RECRUIT_GOLD_PER_SOLDIER, RECRUIT_POPULATION_PER_SOLDIER
 
 
 class City:
@@ -61,10 +62,11 @@ class City:
 
     def recruit_soldiers(self, count):
         """招募士兵"""
-        gold_cost = count * 10
-        if self.gold >= gold_cost and self.population >= count:
+        gold_cost = count * RECRUIT_GOLD_PER_SOLDIER
+        pop_cost = count * RECRUIT_POPULATION_PER_SOLDIER
+        if self.gold >= gold_cost and self.population >= pop_cost:
             self.gold -= gold_cost
-            self.population -= count
+            self.population -= pop_cost
             self.soldiers += count
             return True
         return False
@@ -76,9 +78,9 @@ class City:
         self.gold += gold_income
         self.food += food_income
 
-        # 消耗粮草
+        # 消耗粮草（确保不为负数）
         food_consume = int(self.soldiers * 0.1)
-        self.food -= food_consume
+        self.food = max(0, self.food - food_consume)
 
         # 人口增长
         if self.order > 50:

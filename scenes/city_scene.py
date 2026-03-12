@@ -2,7 +2,7 @@
 城市场景 - 城市管理界面
 """
 import pygame
-from config import COLORS, WINDOW_WIDTH, WINDOW_HEIGHT, FACTION_COLORS
+from config import COLORS, WINDOW_WIDTH, WINDOW_HEIGHT, FACTION_COLORS, RECRUIT_GOLD_PER_SOLDIER, RECRUIT_POPULATION_PER_SOLDIER
 from ui.button import Button
 from ui.panel import Panel
 from systems.economy import EconomySystem
@@ -18,9 +18,9 @@ class CityScene:
         self.city_name = city_name
         self.economy = EconomySystem()
 
-        # 获取城市数据
-        self.city = None
-        self.generals_in_city = []
+        # 获取城市数据（从共享数据中获取）
+        self.city = game_manager.get_shared_data('selected_city')
+        self.generals_in_city = game_manager.get_shared_data('generals_in_city', [])
 
         # 当前选中的标签页
         self.current_tab = 'overview'
@@ -72,15 +72,20 @@ class CityScene:
     def _on_recruit(self):
         """招募士兵"""
         if self.city:
-            if self.city.gold >= 1000 and self.city.population >= 1000:
-                self.city.gold -= 1000
-                self.city.population -= 1000
-                self.city.soldiers += 1000
+            # 每次招募100人
+            recruit_count = 100
+            gold_cost = recruit_count * RECRUIT_GOLD_PER_SOLDIER
+            pop_cost = recruit_count * RECRUIT_POPULATION_PER_SOLDIER
+
+            if self.city.gold >= gold_cost and self.city.population >= pop_cost:
+                self.city.gold -= gold_cost
+                self.city.population -= pop_cost
+                self.city.soldiers += recruit_count
                 self.game_manager.play_sound('recruit')
-                self._show_message("成功招募1000名士兵！")
+                self._show_message(f"成功招募{recruit_count}名士兵！消耗{gold_cost}金")
             else:
                 self.game_manager.play_sound('cancel')
-                self._show_message("资源不足！需要金钱1000，人口1000")
+                self._show_message(f"资源不足！需要金钱{gold_cost}，人口{pop_cost}")
 
     def _on_train(self):
         """训练军队"""

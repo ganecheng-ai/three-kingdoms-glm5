@@ -10,7 +10,7 @@ WINDOW_TITLE = "三国霸业"
 FPS = 60
 
 # 版本信息
-VERSION = "1.0.2"
+VERSION = "1.0.3"
 
 # 颜色定义
 COLORS = {
@@ -68,6 +68,10 @@ MAP_ZOOM_STEP = 0.1
 # 武将属性范围
 GENERAL_ATTR_MIN = 1
 GENERAL_ATTR_MAX = 100
+
+# 招募成本
+RECRUIT_GOLD_PER_SOLDIER = 10  # 每个士兵需要10金
+RECRUIT_POPULATION_PER_SOLDIER = 1  # 每个士兵需要1人口
 
 # 军队设置
 ARMY_BASE_MOVE_SPEED = 5

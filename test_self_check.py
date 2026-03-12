@@ -212,6 +212,7 @@ def test_save_system():
     from entities.faction import Faction
     from entities.city import City
     from entities.general import General
+    from config import VERSION
 
     passed = 0
     failed = 0
@@ -229,7 +230,7 @@ def test_save_system():
         generals = {"曹操": General("曹操", "魏", 72, 91, 96, 94, "许昌")}
 
         data = game_state.export_game_data(factions, cities, generals, 1, 190, 1, "魏")
-        assert data['version'] == '1.0.1'
+        assert data['version'] == VERSION
         assert data['player_faction'] == "魏"
         print(f"  [PASS] 导出存档数据 - 版本: {data['version']}")
         passed += 1

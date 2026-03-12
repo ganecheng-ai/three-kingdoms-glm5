@@ -344,6 +344,11 @@ class MapScene:
         """查看城市详情"""
         if self.selected_city:
             self.game_manager.play_sound('click')
+            # 设置共享数据，传递给城市场景
+            self.game_manager.set_shared_data('selected_city', self.selected_city)
+            # 获取城市中的武将
+            generals_in_city = [self.generals[name] for name in self.selected_city.generals if name in self.generals]
+            self.game_manager.set_shared_data('generals_in_city', generals_in_city)
             self.game_manager.scene_manager.load_scene('city', city_name=self.selected_city.name)
 
     def _on_attack(self):
