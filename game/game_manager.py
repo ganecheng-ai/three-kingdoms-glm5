@@ -6,6 +6,7 @@ from config import COLORS, SOUND_ENABLED
 from game.scene_manager import SceneManager
 from game.resource_loader import ResourceLoader
 from game.sound_manager import get_sound_manager
+from game.settings_manager import get_settings_manager
 
 
 class GameManager:
@@ -22,9 +23,15 @@ class GameManager:
         # 初始化资源加载器
         self.resource_loader = ResourceLoader()
 
+        # 初始化设置管理器并加载设置
+        self.settings_manager = get_settings_manager()
+        self.settings = self.settings_manager.load_settings()
+
         # 初始化音效管理器
         if SOUND_ENABLED:
             self.sound_manager = get_sound_manager()
+            # 应用设置到音效管理器
+            self.settings_manager.apply_to_sound_manager(self.sound_manager)
         else:
             self.sound_manager = None
 
@@ -48,9 +55,21 @@ class GameManager:
 
     def cleanup(self):
         """清理资源"""
+        # 保存设置
+        self.save_settings()
         self.resource_loader.cleanup()
         if self.sound_manager:
             self.sound_manager.cleanup()
+
+    def save_settings(self):
+        """保存游戏设置"""
+        if self.sound_manager:
+            # 从音效管理器同步当前设置
+            self.settings_manager.set_setting('master_volume', self.sound_manager.master_volume)
+            self.settings_manager.set_setting('music_volume', self.sound_manager.music_volume)
+            self.settings_manager.set_setting('sfx_volume', self.sound_manager.sfx_volume)
+            self.settings_manager.set_setting('muted', self.sound_manager.muted)
+        self.settings_manager.save_settings()
 
     def quit_game(self):
         """退出游戏"""

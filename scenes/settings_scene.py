@@ -64,6 +64,8 @@ class SettingsScene(BaseScene):
         self.game_manager.play_sound('cancel')
         # 应用设置
         self._apply_settings()
+        # 保存设置到文件
+        self.game_manager.save_settings()
         self.game_manager.scene_manager.load_scene('main_menu')
 
     def _apply_settings(self):

@@ -75,3 +75,6 @@ secrets.json
 
 # Game logs
 logs/
+
+# Game settings (user-specific)
+settings.json
