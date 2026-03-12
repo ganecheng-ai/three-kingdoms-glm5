@@ -13,8 +13,16 @@ class SoundManager:
     def __init__(self):
         """初始化音效管理器"""
         # 初始化音频系统
+        self.audio_available = False
         if not pygame.mixer.get_init():
-            pygame.mixer.init(frequency=44100, size=-16, channels=2, buffer=512)
+            try:
+                pygame.mixer.init(frequency=44100, size=-16, channels=2, buffer=512)
+                self.audio_available = True
+            except pygame.error:
+                # 音频设备不可用，使用静默模式
+                self.audio_available = False
+        else:
+            self.audio_available = True
 
         self.sounds_dir = os.path.join(ASSETS_DIR, 'sounds')
         self.music_dir = os.path.join(ASSETS_DIR, 'music')
@@ -80,6 +88,10 @@ class SoundManager:
             name: 音效名称
             filename: 文件名
         """
+        if not self.audio_available:
+            self.sounds[name] = None
+            return
+
         filepath = os.path.join(self.sounds_dir, filename)
         try:
             if os.path.exists(filepath):
@@ -89,8 +101,7 @@ class SoundManager:
             else:
                 # 创建一个静默的占位音效
                 self.sounds[name] = None
-        except Exception as e:
-            print(f"Warning: Could not load sound {filename}: {e}")
+        except Exception:
             self.sounds[name] = None
 
     def play(self, sound_name):
@@ -99,7 +110,7 @@ class SoundManager:
         Args:
             sound_name: 音效名称
         """
-        if self.muted:
+        if self.muted or not self.audio_available:
             return
 
         sound = self.sounds.get(sound_name)
@@ -108,7 +119,7 @@ class SoundManager:
                 sound.set_volume(self.sfx_volume * self.master_volume)
                 sound.play()
             except Exception as e:
-                print(f"Warning: Could not play sound {sound_name}: {e}")
+                pass  # 静默处理音频播放错误
 
     def play_random(self, sound_names):
         """随机播放一个音效
@@ -126,7 +137,7 @@ class SoundManager:
             filename: 音乐文件名
             loops: 循环次数，-1表示无限循环
         """
-        if self.muted:
+        if self.muted or not self.audio_available:
             return
 
         filepath = os.path.join(self.music_dir, filename)
@@ -136,10 +147,8 @@ class SoundManager:
                 pygame.mixer.music.set_volume(self.music_volume * self.master_volume)
                 pygame.mixer.music.play(loops)
                 self.current_music = filename
-            else:
-                print(f"Warning: Music file not found: {filepath}")
-        except Exception as e:
-            print(f"Warning: Could not play music {filename}: {e}")
+        except Exception:
+            pass  # 静默处理音频播放错误
 
     def stop_music(self, fade_out_ms=1000):
         """停止背景音乐
