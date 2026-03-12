@@ -60,7 +60,7 @@ class GameState:
 
             return True
         except Exception as e:
-            print(f"保存游戏失败: {e}")
+            logger.error(f"保存游戏失败: {e}")
             return False
 
     def load_game(self, slot):
@@ -159,7 +159,7 @@ class GameState:
                 os.remove(save_path)
             return True
         except Exception as e:
-            print(f"删除存档失败: {e}")
+            logger.error(f"删除存档失败: {e}")
             return False
 
     def list_saves(self):

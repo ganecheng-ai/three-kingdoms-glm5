@@ -4,17 +4,16 @@
 import pygame
 from config import COLORS, WINDOW_WIDTH, WINDOW_HEIGHT, FACTION_COLORS, RECRUIT_GOLD_PER_SOLDIER, RECRUIT_POPULATION_PER_SOLDIER
 from ui.button import Button
-from ui.panel import Panel
 from systems.economy import EconomySystem
+from scenes.base_scene import BaseScene
 
 
-class CityScene:
+class CityScene(BaseScene):
     """城市场景类"""
 
     def __init__(self, game_manager, city_name=None):
         """初始化城市场景"""
-        self.game_manager = game_manager
-        self.resource_loader = game_manager.resource_loader
+        super().__init__(game_manager)
         self.city_name = city_name
         self.economy = EconomySystem()
 
@@ -31,9 +30,6 @@ class CityScene:
         # 操作结果消息
         self.message = None
         self.message_timer = 0
-
-        # 缓存渐变背景Surface以提高性能
-        self._background_cache = None
 
         # 创建UI
         self._create_ui()
@@ -186,18 +182,7 @@ class CityScene:
 
     def _draw_background(self, screen):
         """绘制背景"""
-        # 使用缓存的渐变背景以提高性能
-        if self._background_cache is None:
-            self._background_cache = pygame.Surface((WINDOW_WIDTH, WINDOW_HEIGHT))
-            for y in range(WINDOW_HEIGHT):
-                ratio = y / WINDOW_HEIGHT
-                r = int(30 + ratio * 15)
-                g = int(35 + ratio * 20)
-                b = int(45 + ratio * 25)
-                pygame.draw.line(self._background_cache, (r, g, b), (0, y), (WINDOW_WIDTH, y))
-
-        # 绘制缓存的背景
-        screen.blit(self._background_cache, (0, 0))
+        self._draw_gradient_background(screen, (30, 35, 45), (45, 55, 70))
 
     def _draw_title(self, screen):
         """绘制标题"""

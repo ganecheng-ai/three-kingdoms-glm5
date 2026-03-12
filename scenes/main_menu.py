@@ -5,22 +5,19 @@ import pygame
 import math
 from config import COLORS, WINDOW_WIDTH, WINDOW_HEIGHT, VERSION
 from ui.button import Button
-from ui.panel import Panel
 from ui.dialog import Dialog
 from game.game_state import GameState
 from game.tutorial import TutorialSystem
-from utils.logger import get_logger
+from scenes.base_scene import BaseScene
 
 
-class MainMenuScene:
+class MainMenuScene(BaseScene):
     """主菜单场景类"""
 
     def __init__(self, game_manager):
         """初始化主菜单场景"""
-        self.game_manager = game_manager
-        self.resource_loader = game_manager.resource_loader
+        super().__init__(game_manager)
         self.game_state = GameState(game_manager)
-        self.logger = get_logger()
 
         # 教程系统
         self.tutorial = TutorialSystem(game_manager)
@@ -32,9 +29,6 @@ class MainMenuScene:
         # 粒子效果
         self.particles = []
         self._init_particles()
-
-        # 缓存渐变背景Surface以提高性能
-        self._background_cache = None
 
         # 存档选择状态
         self.showing_saves = False
@@ -267,19 +261,8 @@ class MainMenuScene:
 
     def _draw_background(self, screen):
         """绘制背景"""
-        # 使用缓存的渐变背景以提高性能
-        if self._background_cache is None:
-            self._background_cache = pygame.Surface((WINDOW_WIDTH, WINDOW_HEIGHT))
-            for y in range(WINDOW_HEIGHT):
-                # 从深蓝到深紫的渐变
-                ratio = y / WINDOW_HEIGHT
-                r = int(20 + ratio * 30)
-                g = int(30 + ratio * 15)
-                b = int(60 + ratio * 20)
-                pygame.draw.line(self._background_cache, (r, g, b), (0, y), (WINDOW_WIDTH, y))
-
-        # 绘制缓存的背景
-        screen.blit(self._background_cache, (0, 0))
+        # 使用基类的渐变背景方法
+        self._draw_gradient_background(screen, (20, 30, 60), (50, 45, 80))
 
         # 绘制装饰性线条
         for i in range(5):

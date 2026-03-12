@@ -8,7 +8,6 @@ import os
 import random
 from config import COLORS, WINDOW_WIDTH, WINDOW_HEIGHT, MAP_SCROLL_SPEED, MAP_ZOOM_MIN, MAP_ZOOM_MAX, MAP_ZOOM_STEP, FACTION_COLORS, DATA_DIR
 from ui.button import Button
-from ui.panel import Panel
 from ui.dialog import Dialog
 from entities.city import City
 from entities.general import General
@@ -19,10 +18,10 @@ from systems.economy import EconomySystem
 from systems.ai_system import get_ai_system
 from game.game_state import GameState
 from game.tutorial import TutorialSystem
-from utils.logger import get_logger
+from scenes.base_scene import BaseScene
 
 
-class MapScene:
+class MapScene(BaseScene):
     """地图场景类"""
 
     def __init__(self, game_manager, new_game=True, save_data=None):
@@ -33,12 +32,10 @@ class MapScene:
             new_game: 是否为新游戏
             save_data: 存档数据（如果不是新游戏）
         """
-        self.game_manager = game_manager
-        self.resource_loader = game_manager.resource_loader
+        super().__init__(game_manager)
         self.game_state = GameState(game_manager)
         self.economy_system = EconomySystem()
         self.battle_system = BattleSystem()
-        self.logger = get_logger()
 
         # 教程系统
         self.tutorial = TutorialSystem(game_manager)
@@ -76,9 +73,6 @@ class MapScene:
 
         # 动画
         self.animation_time = 0
-
-        # 缓存渐变背景Surface以提高性能
-        self._background_cache = None
 
         # 初始化游戏数据
         if save_data:
@@ -473,18 +467,8 @@ class MapScene:
 
     def _draw_map_background(self, screen):
         """绘制地图背景"""
-        # 使用缓存的渐变背景以提高性能
-        if self._background_cache is None:
-            self._background_cache = pygame.Surface((WINDOW_WIDTH, WINDOW_HEIGHT))
-            for y in range(WINDOW_HEIGHT):
-                ratio = y / WINDOW_HEIGHT
-                r = int(34 + ratio * 10)
-                g = int(85 + ratio * 15)
-                b = int(51 + ratio * 10)
-                pygame.draw.line(self._background_cache, (r, g, b), (0, y), (WINDOW_WIDTH, y))
-
-        # 绘制缓存的背景
-        screen.blit(self._background_cache, (0, 0))
+        # 使用基类的渐变背景方法（绿色调）
+        self._draw_gradient_background(screen, (34, 85, 51), (44, 100, 61))
 
         # 绘制河流
         self._draw_rivers(screen)

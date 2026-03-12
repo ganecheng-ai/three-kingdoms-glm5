@@ -62,7 +62,7 @@ class ResourceLoader:
                 image = pygame.image.load(full_path).convert_alpha()
                 self.images[name] = image
             except FileNotFoundError:
-                print(f"Warning: Image not found: {full_path}")
+                logger.warning(f"图片文件未找到: {full_path}")
                 # 创建一个占位图片
                 self.images[name] = self._create_placeholder(name)
         return self.images[name]
@@ -85,7 +85,7 @@ class ResourceLoader:
                 sound = pygame.mixer.Sound(full_path)
                 self.sounds[name] = sound
             except FileNotFoundError:
-                print(f"Warning: Sound not found: {full_path}")
+                logger.warning(f"音效文件未找到: {full_path}")
                 return None
         return self.sounds.get(name)
 

@@ -4,19 +4,15 @@
 import pygame
 from config import COLORS, WINDOW_WIDTH, WINDOW_HEIGHT
 from ui.button import Button
-from ui.dialog import Dialog
-from utils.logger import get_logger
-
-logger = get_logger()
+from scenes.base_scene import BaseScene
 
 
-class SettingsScene:
+class SettingsScene(BaseScene):
     """设置场景类"""
 
     def __init__(self, game_manager):
         """初始化设置场景"""
-        self.game_manager = game_manager
-        self.resource_loader = game_manager.resource_loader
+        super().__init__(game_manager)
         self.sound_manager = game_manager.sound_manager
 
         # 设置值
@@ -75,7 +71,7 @@ class SettingsScene:
         self.sound_manager.set_master_volume(self.sliders['master']['value'])
         self.sound_manager.set_music_volume(self.sliders['music']['value'])
         self.sound_manager.set_sfx_volume(self.sliders['sfx']['value'])
-        logger.info(f"音量设置已应用 - 主音量: {self.sliders['master']['value']:.2f}, "
+        self.logger.info(f"音量设置已应用 - 主音量: {self.sliders['master']['value']:.2f}, "
                    f"音乐: {self.sliders['music']['value']:.2f}, "
                    f"音效: {self.sliders['sfx']['value']:.2f}")
 
@@ -144,12 +140,7 @@ class SettingsScene:
 
     def _draw_background(self, screen):
         """绘制背景"""
-        for y in range(WINDOW_HEIGHT):
-            ratio = y / WINDOW_HEIGHT
-            r = int(20 + ratio * 30)
-            g = int(30 + ratio * 15)
-            b = int(60 + ratio * 20)
-            pygame.draw.line(screen, (r, g, b), (0, y), (WINDOW_WIDTH, y))
+        self._draw_gradient_background(screen, (20, 30, 60), (50, 45, 80))
 
     def _draw_slider(self, screen, slider):
         """绘制滑块"""

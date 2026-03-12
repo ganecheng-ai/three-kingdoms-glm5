@@ -6,12 +6,12 @@ import math
 import random
 from config import COLORS, WINDOW_WIDTH, WINDOW_HEIGHT, FACTION_COLORS
 from ui.button import Button
-from ui.panel import Panel
 from entities.army import Army
 from systems.battle import BattleSystem
+from scenes.base_scene import BaseScene
 
 
-class BattleScene:
+class BattleScene(BaseScene):
     """战斗场景类"""
 
     def __init__(self, game_manager, attacker=None, defender=None, city=None):
@@ -23,8 +23,7 @@ class BattleScene:
             defender: 防守方势力名
             city: 目标城市对象
         """
-        self.game_manager = game_manager
-        self.resource_loader = game_manager.resource_loader
+        super().__init__(game_manager)
         self.battle_system = BattleSystem()
 
         # 战斗参数
@@ -50,9 +49,6 @@ class BattleScene:
 
         # 特效
         self.effects = []
-
-        # 缓存渐变背景Surface以提高性能
-        self._background_cache = None
 
         # 创建UI
         self._create_ui()
@@ -301,18 +297,8 @@ class BattleScene:
 
     def _draw_background(self, screen):
         """绘制背景"""
-        # 使用缓存的渐变背景以提高性能
-        if self._background_cache is None:
-            self._background_cache = pygame.Surface((WINDOW_WIDTH, WINDOW_HEIGHT))
-            for y in range(WINDOW_HEIGHT):
-                ratio = y / WINDOW_HEIGHT
-                r = int(40 + ratio * 20)
-                g = int(60 + ratio * 30)
-                b = int(40 + ratio * 20)
-                pygame.draw.line(self._background_cache, (r, g, b), (0, y), (WINDOW_WIDTH, y))
-
-        # 绘制缓存的背景
-        screen.blit(self._background_cache, (0, 0))
+        # 使用基类的渐变背景方法（战场色调）
+        self._draw_gradient_background(screen, (40, 60, 40), (60, 90, 60))
 
     def _draw_battlefield(self, screen):
         """绘制战场"""
