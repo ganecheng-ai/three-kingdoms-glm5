@@ -146,7 +146,7 @@ class GameState:
             游戏数据字典
         """
         return {
-            'version': '0.1.0',
+            'version': '1.0.1',
             'player_faction': player_faction,
             'turn': turn,
             'year': year,
