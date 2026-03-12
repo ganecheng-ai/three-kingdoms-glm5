@@ -1,0 +1,97 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-latest, ubuntu-latest, macos-latest]
+        include:
+          - os: windows-latest
+            artifact_name: three_kingdoms_windows
+            executable_name: three_kingdoms.exe
+          - os: ubuntu-latest
+            artifact_name: three_kingdoms_linux
+            executable_name: three_kingdoms
+          - os: macos-latest
+            artifact_name: three_kingdoms_macos
+            executable_name: three_kingdoms
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Build executable
+      run: |
+        pyinstaller --onefile --windowed --name ${{ matrix.executable_name }} main.py
+
+    - name: Create archive (Windows)
+      if: matrix.os == 'windows-latest'
+      run: |
+        cd dist
+        Compress-Archive -Path ${{ matrix.executable_name }} -DestinationPath ${{ matrix.artifact_name }}.zip
+
+    - name: Create archive (Linux/macOS)
+      if: matrix.os != 'windows-latest'
+      run: |
+        cd dist
+        tar -czvf ${{ matrix.artifact_name }}.tar.gz ${{ matrix.executable_name }}
+
+    - name: Upload artifact (Windows)
+      if: matrix.os == 'windows-latest'
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ matrix.artifact_name }}
+        path: dist/${{ matrix.artifact_name }}.zip
+
+    - name: Upload artifact (Linux/macOS)
+      if: matrix.os != 'windows-latest'
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ matrix.artifact_name }}
+        path: dist/${{ matrix.artifact_name }}.tar.gz
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Download all artifacts
+      uses: actions/download-artifact@v4
+      with:
+        path: artifacts
+
+    - name: Generate checksums
+      run: |
+        cd artifacts
+        find . -type f -exec sha256sum {} \; > ../checksums.txt
+
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          artifacts/three_kingdoms_windows/three_kingdoms_windows.zip
+          artifacts/three_kingdoms_linux/three_kingdoms_linux.tar.gz
+          artifacts/three_kingdoms_macos/three_kingdoms_macos.tar.gz
+          checksums.txt
+        generate_release_notes: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

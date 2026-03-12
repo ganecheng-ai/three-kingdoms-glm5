@@ -1,0 +1,252 @@
+[
+    {
+        "name": "曹操",
+        "faction": "魏",
+        "force": 72,
+        "intelligence": 91,
+        "command": 96,
+        "politics": 94,
+        "skills": ["奸雄", "挟天子"],
+        "city": "许昌"
+    },
+    {
+        "name": "夏侯惇",
+        "faction": "魏",
+        "force": 85,
+        "intelligence": 55,
+        "command": 78,
+        "politics": 45,
+        "skills": ["盲者"],
+        "city": "洛阳"
+    },
+    {
+        "name": "夏侯渊",
+        "faction": "魏",
+        "force": 88,
+        "intelligence": 50,
+        "command": 75,
+        "politics": 42,
+        "skills": ["疾行"],
+        "city": "邺城"
+    },
+    {
+        "name": "张辽",
+        "faction": "魏",
+        "force": 90,
+        "intelligence": 68,
+        "command": 85,
+        "politics": 55,
+        "skills": ["威震"],
+        "city": "许昌"
+    },
+    {
+        "name": "许褚",
+        "faction": "魏",
+        "force": 95,
+        "intelligence": 35,
+        "command": 50,
+        "politics": 30,
+        "skills": ["虎痴"],
+        "city": "许昌"
+    },
+    {
+        "name": "典韦",
+        "faction": "魏",
+        "force": 98,
+        "intelligence": 30,
+        "command": 45,
+        "politics": 25,
+        "skills": ["恶来"],
+        "city": "许昌"
+    },
+    {
+        "name": "荀彧",
+        "faction": "魏",
+        "force": 25,
+        "intelligence": 95,
+        "command": 70,
+        "politics": 98,
+        "skills": ["王佐"],
+        "city": "许昌"
+    },
+    {
+        "name": "郭嘉",
+        "faction": "魏",
+        "force": 20,
+        "intelligence": 98,
+        "command": 75,
+        "politics": 85,
+        "skills": ["鬼谋"],
+        "city": "许昌"
+    },
+    {
+        "name": "刘备",
+        "faction": "蜀",
+        "force": 65,
+        "intelligence": 75,
+        "command": 80,
+        "politics": 85,
+        "skills": ["仁德", "的卢"],
+        "city": "成都"
+    },
+    {
+        "name": "关羽",
+        "faction": "蜀",
+        "force": 97,
+        "intelligence": 75,
+        "command": 95,
+        "politics": 60,
+        "skills": ["武圣", "青龙偃月"],
+        "city": "成都"
+    },
+    {
+        "name": "张飞",
+        "faction": "蜀",
+        "force": 98,
+        "intelligence": 45,
+        "command": 70,
+        "politics": 35,
+        "skills": ["咆哮", "丈八蛇矛"],
+        "city": "汉中"
+    },
+    {
+        "name": "赵云",
+        "faction": "蜀",
+        "force": 96,
+        "intelligence": 76,
+        "command": 88,
+        "politics": 55,
+        "skills": ["龙胆", "七进七出"],
+        "city": "成都"
+    },
+    {
+        "name": "诸葛亮",
+        "faction": "蜀",
+        "force": 38,
+        "intelligence": 100,
+        "command": 95,
+        "politics": 98,
+        "skills": ["卧龙", "八阵图", "空城计"],
+        "city": "成都"
+    },
+    {
+        "name": "黄忠",
+        "faction": "蜀",
+        "force": 92,
+        "intelligence": 60,
+        "command": 75,
+        "politics": 45,
+        "skills": ["神射"],
+        "city": "汉中"
+    },
+    {
+        "name": "马超",
+        "faction": "蜀",
+        "force": 95,
+        "intelligence": 50,
+        "command": 80,
+        "politics": 40,
+        "skills": ["锦马超"],
+        "city": "汉中"
+    },
+    {
+        "name": "孙权",
+        "faction": "吴",
+        "force": 70,
+        "intelligence": 85,
+        "command": 75,
+        "politics": 90,
+        "skills": ["制衡"],
+        "city": "建业"
+    },
+    {
+        "name": "周瑜",
+        "faction": "吴",
+        "force": 75,
+        "intelligence": 96,
+        "command": 95,
+        "politics": 80,
+        "skills": ["火计", "英姿"],
+        "city": "建业"
+    },
+    {
+        "name": "陆逊",
+        "faction": "吴",
+        "force": 65,
+        "intelligence": 95,
+        "command": 92,
+        "politics": 88,
+        "skills": ["火计", "谦逊"],
+        "city": "柴桑"
+    },
+    {
+        "name": "甘宁",
+        "faction": "吴",
+        "force": 92,
+        "intelligence": 48,
+        "command": 72,
+        "politics": 35,
+        "skills": ["奇袭"],
+        "city": "建业"
+    },
+    {
+        "name": "太史慈",
+        "faction": "吴",
+        "force": 90,
+        "intelligence": 62,
+        "command": 78,
+        "politics": 50,
+        "skills": ["神射"],
+        "city": "柴桑"
+    },
+    {
+        "name": "吕蒙",
+        "faction": "吴",
+        "force": 80,
+        "intelligence": 85,
+        "command": 85,
+        "politics": 75,
+        "skills": ["白衣渡江"],
+        "city": "建业"
+    },
+    {
+        "name": "吕布",
+        "faction": "吕布",
+        "force": 100,
+        "intelligence": 35,
+        "command": 60,
+        "politics": 20,
+        "skills": ["无双", "飞将"],
+        "city": "下邳"
+    },
+    {
+        "name": "貂蝉",
+        "faction": "吕布",
+        "force": 20,
+        "intelligence": 88,
+        "command": 40,
+        "politics": 80,
+        "skills": ["离间"],
+        "city": "下邳"
+    },
+    {
+        "name": "董卓",
+        "faction": "董卓",
+        "force": 85,
+        "intelligence": 60,
+        "command": 70,
+        "politics": 40,
+        "skills": ["暴虐"],
+        "city": "长安"
+    },
+    {
+        "name": "袁绍",
+        "faction": "袁绍",
+        "force": 65,
+        "intelligence": 60,
+        "command": 75,
+        "politics": 70,
+        "skills": ["名门"],
+        "city": "邺城"
+    }
+]

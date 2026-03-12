@@ -1,0 +1,122 @@
+[
+    {
+        "name": "武圣",
+        "type": "passive",
+        "description": "武力额外+5，普通攻击必定命中",
+        "effects": {"force": 5}
+    },
+    {
+        "name": "卧龙",
+        "type": "active",
+        "description": "智力判定成功时，可发动计策",
+        "effects": {"intelligence": 5}
+    },
+    {
+        "name": "无双",
+        "type": "passive",
+        "description": "攻击时可同时攻击多个敌人",
+        "effects": {"force": 10}
+    },
+    {
+        "name": "火计",
+        "type": "active",
+        "description": "对敌军造成火焰伤害",
+        "effects": {"damage": 50}
+    },
+    {
+        "name": "离间",
+        "type": "active",
+        "description": "降低敌军士气",
+        "effects": {"morale": -20}
+    },
+    {
+        "name": "奸雄",
+        "type": "passive",
+        "description": "每回合恢复少量士气",
+        "effects": {"morale_regen": 5}
+    },
+    {
+        "name": "仁德",
+        "type": "passive",
+        "description": "提高城市治安增长速度",
+        "effects": {"order_bonus": 10}
+    },
+    {
+        "name": "制衡",
+        "type": "passive",
+        "description": "势力所有武将能力+2",
+        "effects": {"all_bonus": 2}
+    },
+    {
+        "name": "神射",
+        "type": "active",
+        "description": "远程攻击，无视部分防御",
+        "effects": {"range": 3, "penetration": 30}
+    },
+    {
+        "name": "咆哮",
+        "type": "active",
+        "description": "震慑周围敌军，降低士气",
+        "effects": {"aoe_morale": -15}
+    },
+    {
+        "name": "龙胆",
+        "type": "passive",
+        "description": "受到致命伤害时有几率存活",
+        "effects": {"survival_chance": 30}
+    },
+    {
+        "name": "英姿",
+        "type": "passive",
+        "description": "战斗开始时士气+10",
+        "effects": {"initial_morale": 10}
+    },
+    {
+        "name": "疾行",
+        "type": "passive",
+        "description": "移动速度+20%",
+        "effects": {"move_speed": 20}
+    },
+    {
+        "name": "虎痴",
+        "type": "passive",
+        "description": "生命值+20%",
+        "effects": {"hp_bonus": 20}
+    },
+    {
+        "name": "恶来",
+        "type": "passive",
+        "description": "攻击力+15%",
+        "effects": {"attack_bonus": 15}
+    },
+    {
+        "name": "王佐",
+        "type": "passive",
+        "description": "城市收入+10%",
+        "effects": {"income_bonus": 10}
+    },
+    {
+        "name": "鬼谋",
+        "type": "active",
+        "description": "计策成功率+20%",
+        "effects": {"strategy_chance": 20}
+    },
+    {
+        "name": "白衣渡江",
+        "type": "active",
+        "description": "偷袭敌军，造成额外伤害",
+        "effects": {"ambush_damage": 50}
+    },
+    {
+        "name": "锦马超",
+        "type": "passive",
+        "description": "骑兵攻击力+30%",
+        "effects": {"cavalry_bonus": 30}
+    },
+    {
+        "name": "名门",
+        "type": "passive",
+        "description": "招募武将更容易",
+        "effects": {"recruit_chance": 20}
+    }
+]
