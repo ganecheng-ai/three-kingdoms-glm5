@@ -51,6 +51,9 @@ class BattleScene:
         # 特效
         self.effects = []
 
+        # 缓存渐变背景Surface以提高性能
+        self._background_cache = None
+
         # 创建UI
         self._create_ui()
 
@@ -277,13 +280,18 @@ class BattleScene:
 
     def _draw_background(self, screen):
         """绘制背景"""
-        # 战场背景
-        for y in range(WINDOW_HEIGHT):
-            ratio = y / WINDOW_HEIGHT
-            r = int(40 + ratio * 20)
-            g = int(60 + ratio * 30)
-            b = int(40 + ratio * 20)
-            pygame.draw.line(screen, (r, g, b), (0, y), (WINDOW_WIDTH, y))
+        # 使用缓存的渐变背景以提高性能
+        if self._background_cache is None:
+            self._background_cache = pygame.Surface((WINDOW_WIDTH, WINDOW_HEIGHT))
+            for y in range(WINDOW_HEIGHT):
+                ratio = y / WINDOW_HEIGHT
+                r = int(40 + ratio * 20)
+                g = int(60 + ratio * 30)
+                b = int(40 + ratio * 20)
+                pygame.draw.line(self._background_cache, (r, g, b), (0, y), (WINDOW_WIDTH, y))
+
+        # 绘制缓存的背景
+        screen.blit(self._background_cache, (0, 0))
 
     def _draw_battlefield(self, screen):
         """绘制战场"""

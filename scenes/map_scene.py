@@ -77,6 +77,9 @@ class MapScene:
         # 动画
         self.animation_time = 0
 
+        # 缓存渐变背景Surface以提高性能
+        self._background_cache = None
+
         # 初始化游戏数据
         if save_data:
             self._load_from_save(save_data)
@@ -465,13 +468,18 @@ class MapScene:
 
     def _draw_map_background(self, screen):
         """绘制地图背景"""
-        # 绘制渐变背景
-        for y in range(WINDOW_HEIGHT):
-            ratio = y / WINDOW_HEIGHT
-            r = int(34 + ratio * 10)
-            g = int(85 + ratio * 15)
-            b = int(51 + ratio * 10)
-            pygame.draw.line(screen, (r, g, b), (0, y), (WINDOW_WIDTH, y))
+        # 使用缓存的渐变背景以提高性能
+        if self._background_cache is None:
+            self._background_cache = pygame.Surface((WINDOW_WIDTH, WINDOW_HEIGHT))
+            for y in range(WINDOW_HEIGHT):
+                ratio = y / WINDOW_HEIGHT
+                r = int(34 + ratio * 10)
+                g = int(85 + ratio * 15)
+                b = int(51 + ratio * 10)
+                pygame.draw.line(self._background_cache, (r, g, b), (0, y), (WINDOW_WIDTH, y))
+
+        # 绘制缓存的背景
+        screen.blit(self._background_cache, (0, 0))
 
         # 绘制河流
         self._draw_rivers(screen)
