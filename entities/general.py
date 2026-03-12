@@ -20,10 +20,11 @@ class General:
         """
         self.name = name
         self.faction = faction
-        self.force = force
-        self.intelligence = intelligence
-        self.command = command
-        self.politics = politics
+        # 数据验证：确保属性值在合理范围内
+        self.force = max(1, min(100, force))
+        self.intelligence = max(1, min(100, intelligence))
+        self.command = max(1, min(100, command))
+        self.politics = max(1, min(100, politics))
         self.city = city
 
         # 状态

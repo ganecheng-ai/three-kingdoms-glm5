@@ -6,6 +6,7 @@ import math
 from config import COLORS, WINDOW_WIDTH, WINDOW_HEIGHT, VERSION
 from ui.button import Button
 from ui.panel import Panel
+from ui.dialog import Dialog
 from game.game_state import GameState
 from game.tutorial import TutorialSystem
 from utils.logger import get_logger
@@ -68,16 +69,20 @@ class MainMenuScene:
 
         self.main_buttons = {
             'new_game': Button(
-                button_x, center_y + 20, button_width, button_height,
+                button_x, center_y - 50, button_width, button_height,
                 "开始新游戏", self._on_new_game
             ),
             'tutorial': Button(
-                button_x, center_y + 90, button_width, button_height,
+                button_x, center_y + 20, button_width, button_height,
                 "游戏教程", self._on_tutorial
             ),
             'load_game': Button(
-                button_x, center_y + 160, button_width, button_height,
+                button_x, center_y + 90, button_width, button_height,
                 "读取存档", self._on_load_game
+            ),
+            'settings': Button(
+                button_x, center_y + 160, button_width, button_height,
+                "游戏设置", self._on_settings
             ),
             'quit': Button(
                 button_x, center_y + 230, button_width, button_height,
@@ -103,6 +108,16 @@ class MainMenuScene:
             "确认读取", self._on_confirm_load
         )
 
+        # 退出确认对话框
+        self.quit_dialog = Dialog(
+            "确认退出",
+            "确定要退出游戏吗？",
+            [
+                ("确定", self._confirm_quit),
+                ("取消", self._cancel_quit)
+            ]
+        )
+
     def _on_new_game(self):
         """新游戏按钮回调"""
         # 播放确认音效
@@ -123,6 +138,12 @@ class MainMenuScene:
         self.game_manager.play_sound('click')
         self.showing_saves = True
         self._refresh_save_slots()
+
+    def _on_settings(self):
+        """设置按钮回调"""
+        self.game_manager.play_sound('click')
+        self.logger.info("打开设置")
+        self.game_manager.scene_manager.load_scene('settings')
 
     def _refresh_save_slots(self):
         """刷新存档槽位显示"""
@@ -160,11 +181,26 @@ class MainMenuScene:
 
     def _on_quit(self):
         """退出游戏按钮回调"""
+        self.game_manager.play_sound('click')
+        self.quit_dialog.show()
+
+    def _confirm_quit(self):
+        """确认退出游戏"""
         self.game_manager.play_sound('cancel')
         self.game_manager.quit_game()
 
+    def _cancel_quit(self):
+        """取消退出"""
+        self.game_manager.play_sound('cancel')
+        self.quit_dialog.hide()
+
     def handle_event(self, event):
         """处理事件"""
+        # 处理退出确认对话框
+        if self.quit_dialog.visible:
+            if self.quit_dialog.handle_event(event):
+                return
+
         # 处理教程事件
         if self.tutorial.visible:
             if self.tutorial.handle_event(event):
@@ -225,6 +261,9 @@ class MainMenuScene:
 
         # 绘制教程
         self.tutorial.render(screen)
+
+        # 绘制退出确认对话框
+        self.quit_dialog.render(screen, self.resource_loader)
 
     def _draw_background(self, screen):
         """绘制背景"""

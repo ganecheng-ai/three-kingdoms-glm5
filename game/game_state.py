@@ -5,6 +5,9 @@ import json
 import os
 from datetime import datetime
 from config import VERSION
+from utils.logger import get_logger
+
+logger = get_logger()
 
 
 class GameState:
@@ -75,10 +78,50 @@ class GameState:
                 return None
 
             with open(save_path, 'r', encoding='utf-8') as f:
-                return json.load(f)
-        except Exception as e:
-            print(f"加载游戏失败: {e}")
+                data = json.load(f)
+
+            # 数据完整性校验
+            required_fields = ['version', 'player_faction', 'turn', 'factions', 'cities', 'generals']
+            for field in required_fields:
+                if field not in data:
+                    logger.error(f"存档数据不完整，缺少字段: {field}")
+                    return None
+
+            # 版本兼容性检查
+            save_version = data.get('version', '0.0.0')
+            if not self._check_version_compatibility(save_version):
+                logger.warning(f"存档版本 {save_version} 与当前版本 {VERSION} 可能不兼容")
+
+            logger.info(f"成功加载存档槽位 {slot}, 版本: {save_version}")
+            return data
+        except json.JSONDecodeError as e:
+            logger.error(f"存档文件格式错误: {e}")
             return None
+        except Exception as e:
+            logger.error(f"加载游戏失败: {e}")
+            return None
+
+    def _check_version_compatibility(self, save_version):
+        """检查版本兼容性
+
+        Args:
+            save_version: 存档版本号
+
+        Returns:
+            是否兼容
+        """
+        try:
+            # 解析版本号
+            save_parts = [int(x) for x in save_version.split('.')]
+            current_parts = [int(x) for x in VERSION.split('.')]
+
+            # 主版本号相同则兼容
+            if save_parts[0] == current_parts[0]:
+                return True
+
+            return False
+        except (ValueError, IndexError):
+            return False
 
     def get_save_info(self, slot):
         """获取存档信息

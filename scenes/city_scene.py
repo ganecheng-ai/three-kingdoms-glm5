@@ -32,6 +32,9 @@ class CityScene:
         self.message = None
         self.message_timer = 0
 
+        # 缓存渐变背景Surface以提高性能
+        self._background_cache = None
+
         # 创建UI
         self._create_ui()
 
@@ -183,12 +186,18 @@ class CityScene:
 
     def _draw_background(self, screen):
         """绘制背景"""
-        for y in range(WINDOW_HEIGHT):
-            ratio = y / WINDOW_HEIGHT
-            r = int(30 + ratio * 15)
-            g = int(35 + ratio * 20)
-            b = int(45 + ratio * 25)
-            pygame.draw.line(screen, (r, g, b), (0, y), (WINDOW_WIDTH, y))
+        # 使用缓存的渐变背景以提高性能
+        if self._background_cache is None:
+            self._background_cache = pygame.Surface((WINDOW_WIDTH, WINDOW_HEIGHT))
+            for y in range(WINDOW_HEIGHT):
+                ratio = y / WINDOW_HEIGHT
+                r = int(30 + ratio * 15)
+                g = int(35 + ratio * 20)
+                b = int(45 + ratio * 25)
+                pygame.draw.line(self._background_cache, (r, g, b), (0, y), (WINDOW_WIDTH, y))
+
+        # 绘制缓存的背景
+        screen.blit(self._background_cache, (0, 0))
 
     def _draw_title(self, screen):
         """绘制标题"""
@@ -310,8 +319,21 @@ class CityScene:
                 name_text = small_font.render(f"• {general_name}", True, COLORS['white'])
                 screen.blit(name_text, (x_start, y))
 
-                # 属性（简化显示）
-                attrs = small_font.render("武:90 智:80 统:85", True, COLORS['light_gray'])
+                # 从武将列表中查找对应武将的属性
+                general = None
+                for g in self.generals_in_city:
+                    if g.name == general_name:
+                        general = g
+                        break
+
+                # 显示实际属性值
+                if general:
+                    attrs = small_font.render(
+                        f"武:{general.force} 智:{general.intelligence} 统:{general.command}",
+                        True, COLORS['light_gray']
+                    )
+                else:
+                    attrs = small_font.render("武:-- 智:-- 统:--", True, COLORS['light_gray'])
                 screen.blit(attrs, (x_start + 120, y))
                 y += 35
         else:

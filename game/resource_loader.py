@@ -4,6 +4,9 @@
 import os
 import pygame
 from config import ASSETS_DIR, DATA_DIR, FONT_SIZE_NORMAL
+from utils.logger import get_logger
+
+logger = get_logger()
 
 
 class ResourceLoader:
@@ -38,8 +41,10 @@ class ResourceLoader:
                 self.fonts['large'] = pygame.font.SysFont(font_name, 28)
                 self.fonts['title'] = pygame.font.SysFont(font_name, 48)
                 font_loaded = True
+                logger.info(f"成功加载字体: {font_name}")
                 break
-            except:
+            except Exception as e:
+                logger.debug(f"无法加载字体 {font_name}: {e}")
                 continue
 
         if not font_loaded:

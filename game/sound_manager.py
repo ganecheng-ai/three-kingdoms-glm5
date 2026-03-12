@@ -5,6 +5,9 @@ import os
 import pygame
 import random
 from config import ASSETS_DIR
+from utils.logger import get_logger
+
+logger = get_logger()
 
 
 class SoundManager:
@@ -119,7 +122,7 @@ class SoundManager:
                 sound.set_volume(self.sfx_volume * self.master_volume)
                 sound.play()
             except Exception as e:
-                pass  # 静默处理音频播放错误
+                logger.debug(f"播放音效失败 {sound_name}: {e}")
 
     def play_random(self, sound_names):
         """随机播放一个音效

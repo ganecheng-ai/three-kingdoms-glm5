@@ -140,8 +140,29 @@ class BattleScene:
             # 播放胜利/失败音效
             if self.battle_result['winner'] == 'attacker':
                 self.game_manager.play_sound('victory')
+                # 攻击方胜利，更新城市归属
+                if self.target_city:
+                    old_faction = self.target_city.faction
+                    self.target_city.faction = self.attacker_faction
+                    # 扣除攻击方兵力损耗
+                    attacker_losses = self.battle_result.get('attacker_losses', 0)
+                    self.target_city.soldiers = max(0, self.target_city.soldiers - attacker_losses)
+                    # 保存战斗结果供地图场景使用
+                    self.game_manager.set_shared_data('battle_result', {
+                        'winner': 'attacker',
+                        'city_name': self.target_city.name,
+                        'new_faction': self.attacker_faction,
+                        'old_faction': old_faction,
+                    })
             else:
                 self.game_manager.play_sound('defeat')
+                # 防守方胜利，保存战斗结果
+                if self.target_city:
+                    self.game_manager.set_shared_data('battle_result', {
+                        'winner': 'defender',
+                        'city_name': self.target_city.name,
+                    })
+
             self.game_manager.scene_manager.load_scene('map')
 
     def _auto_battle(self):

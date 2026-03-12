@@ -5,6 +5,7 @@ from scenes.main_menu import MainMenuScene
 from scenes.map_scene import MapScene
 from scenes.battle_scene import BattleScene
 from scenes.city_scene import CityScene
+from scenes.settings_scene import SettingsScene
 
 
 class SceneManager:
@@ -26,6 +27,7 @@ class SceneManager:
             'map': MapScene,
             'battle': BattleScene,
             'city': CityScene,
+            'settings': SettingsScene,
         }
 
     def load_scene(self, scene_name, **kwargs):

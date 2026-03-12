@@ -29,6 +29,12 @@ class City:
         self.x = x
         self.y = y
 
+        # 资源上限
+        self.max_population = 1000000  # 最大人口
+        self.max_gold = 1000000  # 最大金钱
+        self.max_food = 1000000  # 最大粮草
+        self.max_soldiers = 100000  # 最大兵力
+
         # 城市属性
         self.defense = 100  # 城防值
         self.order = 100  # 治安值
@@ -75,17 +81,20 @@ class City:
         """更新城市状态（每月调用）"""
         # 计算收入
         gold_income, food_income = self.calculate_income()
-        self.gold += gold_income
-        self.food += food_income
+        self.gold = min(self.max_gold, self.gold + gold_income)
+        self.food = min(self.max_food, self.food + food_income)
 
         # 消耗粮草（确保不为负数）
         food_consume = int(self.soldiers * 0.1)
         self.food = max(0, self.food - food_consume)
 
-        # 人口增长
+        # 人口增长（不超过上限）
         if self.order > 50:
             growth = int(self.population * 0.01)
-            self.population += growth
+            self.population = min(self.max_population, self.population + growth)
+
+        # 确保兵力不超过上限
+        self.soldiers = min(self.max_soldiers, self.soldiers)
 
     def to_dict(self):
         """转换为字典"""
